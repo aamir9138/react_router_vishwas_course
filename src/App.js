@@ -1,6 +1,6 @@
-import { Routes, Route } from 'react-router-dom';
-import { About } from './components/About';
-import { Home } from './components/Home';
+// import { Routes, Route } from 'react-router-dom';
+// import { About } from './components/About';
+// import { Home } from './components/Home';
 
 // // without self closing tag
 // function App() {
@@ -12,13 +12,32 @@ import { Home } from './components/Home';
 //   );
 // }
 
-// with self closing tag
+// // with self closing tag
+// function App() {
+//   return (
+//     <Routes>
+//       <Route path="/" element={<Home />} />
+//       <Route path="/about" element={<About />} />
+//     </Routes>
+//   );
+// }
+
+// export default App;
+
+/* lecture 4 Links */
+import { Routes, Route } from 'react-router-dom';
+import { About } from './components/About';
+import { Home } from './components/Home';
+import { Navbar } from './components/Navbar';
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/about" element={<About />} />
-    </Routes>
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </>
   );
 }
 

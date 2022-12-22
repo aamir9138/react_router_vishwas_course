@@ -100,3 +100,59 @@ export default App;
 - package: `react-router-dom`
 - components: `BrowserRouter`, `Routes`, `Route`
 - props: `path`, `element`
+
+## lecture 4 Links
+
+- using an element in the UI to navigate to different route.
+- previously we were changing URL in the browser to go to different routes
+- so we need to make it interactive. for that add a Navbar with 2 links `Home` and `About`
+
+![Navbar for links](./pictures/Navbar_links.PNG)
+
+1. create a component `Navbar.js` in `components` folder.
+2. import `Link` from `react-router-dom`.
+3. write a `nav` tag. inside `nav` use `Link` components.
+4. `Link` work as an anchor tag where instead of `href` we give path in `to` prop as below.
+
+```
+/* lecture 4 Links */
+import { Link } from 'react-router-dom';
+
+export const Navbar = () => {
+  return (
+    <nav>
+      <Link to="/">Home</Link>
+      <Link to="/about">About</Link>
+    </nav>
+  );
+};
+```
+
+5. in `App.js` we can import the `Navbar` component as below
+
+```
+/* lecture 4 Links */
+import { Routes, Route } from 'react-router-dom';
+import { About } from './components/About';
+import { Home } from './components/Home';
+import { Navbar } from './components/Navbar';
+function App() {
+  return (
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </>
+  );
+}
+
+export default App;
+```
+
+6. if we inspect the individual link in browser. we can see that these `Links` are actually `anchor tags`. and the `to` prop is and `href` attribute
+
+![Link_to_anchor_tag](./pictures/Link_change_a_tag.PNG)
+
+7. if we are navigating inside an application we must use `Link` with the Router but if we want to navigate outside of the application we can use anchor tag i.e `<a>` tag
