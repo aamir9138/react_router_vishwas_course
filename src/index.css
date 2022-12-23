@@ -12,7 +12,17 @@ code {
     monospace;
 }
 
-/* lecture 4 Links */
+/* lecture 4 Links
+nav {
+  background-color: aliceblue;
+  padding: 16px 32px;
+}
+
+nav a {
+  margin-right: 16px
+} */
+
+/* lecture 5 Active Links */
 nav {
   background-color: aliceblue;
   padding: 16px 32px;
@@ -21,3 +31,9 @@ nav {
 nav a {
   margin-right: 16px
 }
+
+/* commented for the js solution */
+/* nav a.active {
+  text-decoration: none;
+  font-weight: bold;
+} */

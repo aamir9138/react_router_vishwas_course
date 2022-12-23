@@ -156,3 +156,70 @@ export default App;
 ![Link_to_anchor_tag](./pictures/Link_change_a_tag.PNG)
 
 7. if we are navigating inside an application we must use `Link` with the Router but if we want to navigate outside of the application we can use anchor tag i.e `<a>` tag
+
+## lecture 5 Active Links
+
+- To style the active link differently we need to make changes both with `Link` component and the `css`.
+
+### NavLink
+
+- so instead of simple `Link` we have a `NavLink` which knows either the link is active or not
+- what is so special about this `NavLink` is that by default it receive an `active` class when it is clicked.
+- so we can change our `Navbar` component as below.
+
+```
+/* lecture 5 Active Links */
+import { NavLink } from 'react-router-dom';
+
+export const Navbar = () => {
+  return (
+    <nav>
+      <NavLink to="/">Home</NavLink>
+      <NavLink to="/about">About</NavLink>
+    </nav>
+  );
+};
+```
+
+- we can inspect this in the browser to see the active class in the picture below.
+  ![NavLink active class](./pictures/NavLink_active_class.PNG)
+
+- with this active class we can add some styles in our CSS.
+
+```
+nav a.active {
+  text-decoration: none;
+  font-weight: bold;
+}
+```
+
+- instead of CSS we may use js solution for styling the active link. in that solution the `NavLink` component provides `isActive` boolean value which will be applied the `style` prop depending if the link is active or not. the code will be something like this.
+
+```
+// for the js styling solution
+import { NavLink } from 'react-router-dom';
+
+export const Navbar = () => {
+  const navLinkStyles = ({ isActive }) => {
+    return {
+      fontWeight: isActive ? 'bold' : 'normal',
+      textDecoration: isActive ? 'none' : 'underline',
+    };
+  };
+  return (
+    <nav>
+      <NavLink style={navLinkStyles} to="/">
+        Home
+      </NavLink>
+      <NavLink style={navLinkStyles} to="/about">
+        About
+      </NavLink>
+    </nav>
+  );
+};
+```
+
+### Link or NavLink
+
+- use `NavLink` for navbar items, breadcrums or areas where we need to change UI based on `active` class.
+- for other routes in the application just use the `Link` component

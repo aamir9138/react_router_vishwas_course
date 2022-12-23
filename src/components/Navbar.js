@@ -1,11 +1,46 @@
-/* lecture 4 Links */
-import { Link } from 'react-router-dom';
+// /* lecture 4 Links */
+// import { Link } from 'react-router-dom';
+
+// export const Navbar = () => {
+//   return (
+//     <nav>
+//       <Link to="/">Home</Link>
+//       <Link to="/about">About</Link>
+//     </nav>
+//   );
+// };
+
+/* lecture 5 Active Links */
+// // for the CSS styling solution
+// import { NavLink } from 'react-router-dom';
+
+// export const Navbar = () => {
+//   return (
+//     <nav>
+//       <NavLink to="/">Home</NavLink>
+//       <NavLink to="/about">About</NavLink>
+//     </nav>
+//   );
+// };
+
+// for the js styling solution
+import { NavLink } from 'react-router-dom';
 
 export const Navbar = () => {
+  const navLinkStyles = ({ isActive }) => {
+    return {
+      fontWeight: isActive ? 'bold' : 'normal',
+      textDecoration: isActive ? 'none' : 'underline',
+    };
+  };
   return (
     <nav>
-      <Link to="/">Home</Link>
-      <Link to="/about">About</Link>
+      <NavLink style={navLinkStyles} to="/">
+        Home
+      </NavLink>
+      <NavLink style={navLinkStyles} to="/about">
+        About
+      </NavLink>
     </nav>
   );
 };
