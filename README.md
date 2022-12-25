@@ -223,3 +223,67 @@ export const Navbar = () => {
 
 - use `NavLink` for navbar items, breadcrums or areas where we need to change UI based on `active` class.
 - for other routes in the application just use the `Link` component
+
+## Navigating Programmatically
+
+- in the picture below a scenario is presented. where if let say an order is placed the browser programmatically navigate you to the `order confirmation` page.
+
+![Navigating Programmatically Scenario](./pictures/navigating_programmatically_scenario.PNG)
+
+- for us we will simulate this with the onClick of the button navigate to the confirmation page.
+
+1. create a component `OrderSummary.js`
+2. in `Home` component create a button `place order`. on click of that button call the `navigate` function with the parameter of the `OrderSummary` component path.
+3. the `navigate` function can be received from the `useNavigate()` hook from `react-router-dom`
+
+```
+/* lecture 6 Navigating Programmatically */
+import { useNavigate } from 'react-router-dom';
+export const Home = () => {
+  const navigate = useNavigate();
+  return (
+    <>
+      <div>Home</div>
+      <button onClick={() => navigate('/order-summary')}>place order</button>
+    </>
+  );
+};
+```
+
+4. if we want to go back from the order-summary page we can use the same technique the only difference is that for the `go back` functionality use a number of `-1` as a parameter to the `navigate(-1)` function
+
+```
+/* lecture 6 navigating Programmatically */
+import { useNavigate } from 'react-router-dom';
+export const OrderSummary = () => {
+  const navigate = useNavigate();
+  return (
+    <>
+      <div>Order Confirmed</div>
+      <button onClick={() => navigate(-1)}>go back</button>
+    </>
+  );
+};
+```
+
+5. now you might want to replace the `history` instead of pushing a routes on to the stack. for that you can pass in an optional second `argument`.
+
+6. so in `Home.js` to navigate function we pass in an optional second argument which is an `object` with a property `replace` set to true as below
+
+```
+// replacing history instead of pushing route to the stack
+import { useNavigate } from 'react-router-dom';
+export const Home = () => {
+  const navigate = useNavigate();
+  return (
+    <>
+      <div>Home</div>
+      <button onClick={() => navigate('/order-summary', { replace: true })}>
+        place order
+      </button>
+    </>
+  );
+};
+```
+
+7. so if we `place order` and then press `go back` you will see that we come all the way back to the `google page`. This is because we replace the history.
