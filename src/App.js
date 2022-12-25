@@ -24,11 +24,33 @@
 
 // export default App;
 
-/* lecture 4 Links */
+// /* lecture 4 Links */
+// import { Routes, Route } from 'react-router-dom';
+// import { About } from './components/About';
+// import { Home } from './components/Home';
+// import { Navbar } from './components/Navbar';
+// import { OrderSummary } from './components/OrderSummary';
+// function App() {
+//   return (
+//     <>
+//       <Navbar />
+//       <Routes>
+//         <Route path="/" element={<Home />} />
+//         <Route path="/about" element={<About />} />
+//         <Route path="/order-summary" element={<OrderSummary />} />
+//       </Routes>
+//     </>
+//   );
+// }
+
+// export default App;
+
+/* lecture 7 No Match Route */
 import { Routes, Route } from 'react-router-dom';
 import { About } from './components/About';
 import { Home } from './components/Home';
 import { Navbar } from './components/Navbar';
+import { NoMatch } from './components/NoMatch';
 import { OrderSummary } from './components/OrderSummary';
 function App() {
   return (
@@ -38,6 +60,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/order-summary" element={<OrderSummary />} />
+        <Route path="*" element={<NoMatch />} />
       </Routes>
     </>
   );

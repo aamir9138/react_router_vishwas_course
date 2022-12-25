@@ -287,3 +287,40 @@ export const Home = () => {
 ```
 
 7. so if we `place order` and then press `go back` you will see that we come all the way back to the `google page`. This is because we replace the history.
+
+## lecture 7 No Match Route
+
+- let us take a look at configuring a `No Match Route` in a react application.
+- currently if we go to a route which is not configured. for example `localhost:3000/user`. we don't see a UI below the Navbar.
+- And if we take a look at the console we have a warning. `No routes matched location "/user"`. The scenario is displayed in the picture.
+  ![no routes matched](./pictures/no_routes_matched_warning.PNG)
+- This scenario is not favourable for a user point of view. A user might thing the app is still loading or there is an error in `/user` route.
+- The better way would be to inform the user that the URL doesn't match any route in our application.
+- To tackle this create a component which will be invoked if the URL given didn't match any of the other given routes.
+- in `components` folder create `NoMatch.js` component. which will give a message `Page not found`.
+- create a new `Route` in `App.js` with the `path='*'`. This route will match only when no other routes do.
+
+```
+/* lecture 7 No Match Route */
+import { Routes, Route } from 'react-router-dom';
+import { About } from './components/About';
+import { Home } from './components/Home';
+import { Navbar } from './components/Navbar';
+import { NoMatch } from './components/NoMatch';
+import { OrderSummary } from './components/OrderSummary';
+function App() {
+  return (
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/order-summary" element={<OrderSummary />} />
+        <Route path="*" element={<NoMatch />} />
+      </Routes>
+    </>
+  );
+}
+
+export default App;
+```
