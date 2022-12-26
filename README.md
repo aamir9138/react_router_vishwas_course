@@ -324,3 +324,160 @@ function App() {
 
 export default App;
 ```
+
+## lecture 8 Nested Routes
+
+- uptill now we used `react-router` to switch between pages.
+- what you should know that react router also help us to switch between a portion of a view inside a page.
+- to demonstrate this create a new navlink for `products` page as seen below
+
+![products page route](./pictures/product_page_route.PNG)
+
+- the above scenario is familiar to us as before. let say now we have a scenario as below.
+
+![nested routes products page](./pictures/nested_routes_products_page.PNG)
+
+<u>first scenario</u>
+
+- to implement the scenario use below code. create a new component `products`
+
+```
+/* lecture 8 Nested Routes */
+export const Products = () => {
+  return (
+    <div>
+      <input type="search" placeholder="Search Products" />
+    </div>
+  );
+};
+```
+
+- call the `products` component upon the route to the path of `/products`
+
+```
+/* lecture 8 Nested Routes */
+import { Routes, Route } from 'react-router-dom';
+import { About } from './components/About';
+import { Home } from './components/Home';
+import { Navbar } from './components/Navbar';
+import { NoMatch } from './components/NoMatch';
+import { OrderSummary } from './components/OrderSummary';
+import { Products } from './components/Products';
+function App() {
+  return (
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/order-summary" element={<OrderSummary />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="*" element={<NoMatch />} />
+      </Routes>
+    </>
+  );
+}
+
+export default App;
+```
+
+- Similarly add a NavLink for the products page on the `Navbar` component.
+
+```
+/* lecture 8 Nested Routes */
+import { NavLink } from 'react-router-dom';
+export const Navbar = () => {
+  const navLinkStyles = ({ isActive }) => {
+    return {
+      fontWeight: isActive ? 'bold' : 'normal',
+      textDecoration: isActive ? 'none' : 'underline',
+    };
+  };
+  return (
+    <nav>
+      <NavLink style={navLinkStyles} to="/">
+        Home
+      </NavLink>
+      <NavLink style={navLinkStyles} to="/about">
+        About
+      </NavLink>
+      <NavLink style={navLinkStyles} to="/products">
+        Products
+      </NavLink>
+    </nav>
+  );
+};
+```
+
+<u> Second Scenario </u>
+
+- in this scenario we have to include another navigation links with in the products component.
+
+```
+/* Scenario 2 Adding navigation links inside products page */
+import { Link } from 'react-router-dom';
+export const Products = () => {
+  return (
+    <>
+      <div>
+        <input type="search" placeholder="Search Products" />
+      </div>
+      {/* make sure not to use forward slash in front of 'featured'. Relative Paths (without '/') which
+    we will learn about later on in the series */}
+      <nav>
+        <Link to="featured">Featured</Link>
+        <Link to="new">New</Link>
+      </nav>
+    </>
+  );
+};
+```
+
+- keep the styling change only the the `main navbar` for that we create a class `nav-primary` and apply those style to the main nav only.
+
+```
+/* lecture 8 Nested Routes */
+/* applying styles to the main nav only scenario 2 */
+.nav-primary {
+  background-color: aliceblue;
+  padding: 16px 32px;
+}
+
+nav a {
+  margin-right: 16px
+}
+```
+
+- Create 2 new components `FeaturedProducts.js` and `NewProducts.js`.
+- now configure new routes for these 2 components. more specifically configure the nested routes.
+- in `App.js` file we will make the following changes.
+
+```
+<Route path="/products" element={<Products />}>
+  <Route path='featured' element={<FeaturedProducts/>}/>
+  <Route path='new' element={<NewProducts/>}/>
+</Route>
+```
+
+- so now the router knows how to route the child components but the `products` component still don't know where to list the component on the `products page` when we click one of `featured` or `new` link.
+- for that 'react-router-dom' provides `Outlet` component. which we will use below the `nav` tag.
+
+```
+import { Link, Outlet } from 'react-router-dom';
+export const Products = () => {
+  return (
+    <>
+      <div>
+        <input type="search" placeholder="Search Products" />
+      </div>
+      {/* make sure not to use forward slash in front of 'featured'. Relative Paths (without '/') which
+    we will learn about later on in the series */}
+      <nav>
+        <Link to="featured">Featured</Link>
+        <Link to="new">New</Link>
+      </nav>
+      <Outlet />
+    </>
+  );
+};
+```
