@@ -481,3 +481,51 @@ export const Products = () => {
   );
 };
 ```
+
+## lecture 9 Index Route
+
+- The products page consist of 2 Nested route `Featured` link render the list of featured products and `New` link render the list of new products.
+- The nested routes render only when the URL is `/products/feature` or `/products/new`.
+- sometime you might want one of the child to render at the parent route level i.e at `/products`
+- This can be achieved with the `index Route`.
+- The index route is also going to be the Nested route. so with the products write below code
+- here instead of `path` we use `index` prop as below
+
+```
+<Route index element={<FeaturedProducts/>}/>
+```
+
+- the full component is will look like this now
+
+```
+/* lecture 9 Index Route */
+import { Routes, Route } from 'react-router-dom';
+import { About } from './components/About';
+import { FeaturedProducts } from './components/FeaturedProducts';
+import { Home } from './components/Home';
+import { Navbar } from './components/Navbar';
+import { NewProducts } from './components/NewProducts';
+import { NoMatch } from './components/NoMatch';
+import { OrderSummary } from './components/OrderSummary';
+import { Products } from './components/Products';
+function App() {
+  return (
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/order-summary" element={<OrderSummary />} />
+        <Route path="/products" element={<Products />}>
+          <Route index element={<FeaturedProducts />} />
+          <Route path="featured" element={<FeaturedProducts />} />
+          <Route path="new" element={<NewProducts />} />
+        </Route>
+        <Route path="*" element={<NoMatch />} />
+      </Routes>
+    </>
+  );
+}
+
+export default App;
+```
