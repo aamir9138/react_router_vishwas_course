@@ -529,3 +529,183 @@ function App() {
 
 export default App;
 ```
+
+## lecture 10 Dynamic Routes
+
+![dynamic routes](./pictures/dynamic_routes.PNG)
+
+so if we have Dynamic routes for example we have a number of users `user1`, `user2`,`user3` and so on. it can be thousand. so each user we want to show the user detail. to implement this scenario
+
+1. create `Users.js` component
+
+```
+/* lecture 10 Dynamic Routes */
+export const Users = () => {
+  return (
+    <div>
+      <h2>User 1</h2>
+      <h2>User 2</h2>
+      <h2>User 3</h2>
+    </div>
+  );
+};
+```
+
+2. configure a route for this component
+
+```
+<Route path="users" element={<Users />} />
+```
+
+3. at `localhost:3000/users` we see the list of users
+4. Create `UserDetails.js` components. it will render for all the users.
+
+```
+<Route path="users" element={<Users />} />
+<Route path="users/1" element={<UserDetails />} />
+<Route path="users/2" element={<UserDetails />} />
+<Route path="users/3" element={<UserDetails />} />
+```
+
+5. this is not feasible solution. if we have 100 users we need that much line of code.
+6. so instead of each user we provide `URL params` which is `/:userId`. we will use this within the path
+7. this `:userId` param will match any value as long as the pattern is the same.
+
+```
+/* lecture 10 Dynamic Routes */
+import { Routes, Route } from 'react-router-dom';
+import { About } from './components/About';
+import { Admin } from './components/Admin';
+import { FeaturedProducts } from './components/FeaturedProducts';
+import { Home } from './components/Home';
+import { Navbar } from './components/Navbar';
+import { NewProducts } from './components/NewProducts';
+import { NoMatch } from './components/NoMatch';
+import { OrderSummary } from './components/OrderSummary';
+import { Products } from './components/Products';
+import { UserDetails } from './components/UserDetails';
+import { Users } from './components/Users';
+function App() {
+  return (
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="about" element={<About />} />
+        <Route path="order-summary" element={<OrderSummary />} />
+        <Route path="products" element={<Products />}>
+          <Route index element={<FeaturedProducts />} />
+          <Route path="featured" element={<FeaturedProducts />} />
+          <Route path="new" element={<NewProducts />} />
+        </Route>
+        {/* not feasible solution */}
+        {/* <Route path="users" element={<Users />} />
+        <Route path="users/1" element={<UserDetails />} />
+        <Route path="users/2" element={<UserDetails />} />
+        <Route path="users/3" element={<UserDetails />} /> */}
+
+        {/* feasible solution with URL params */}
+        <Route path="users" element={<Users />} />
+        <Route path="users/:userId" element={<UserDetails />} />
+
+        {/* for the admin user */}
+        <Route path="users/admin" element={<Admin />} />
+        <Route path="*" element={<NoMatch />} />
+      </Routes>
+    </>
+  );
+}
+
+export default App;
+```
+
+8. The `:userId` can be any string and not just a number. so it will output the same result even for `users/admin`. in order to have a separate message for `admin`. create a new component `Admin.js` and provide the path to the route.
+
+### dynamic routes can be Nested as well
+
+so the dynamic component we will put it as childs. and import the `Outlet` component in `User.js` component so that the child component will render there.
+
+```
+// Nested Dynamic routes
+import { Routes, Route } from 'react-router-dom';
+import { About } from './components/About';
+import { Admin } from './components/Admin';
+import { FeaturedProducts } from './components/FeaturedProducts';
+import { Home } from './components/Home';
+import { Navbar } from './components/Navbar';
+import { NewProducts } from './components/NewProducts';
+import { NoMatch } from './components/NoMatch';
+import { OrderSummary } from './components/OrderSummary';
+import { Products } from './components/Products';
+import { UserDetails } from './components/UserDetails';
+import { Users } from './components/Users';
+function App() {
+  return (
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="about" element={<About />} />
+        <Route path="order-summary" element={<OrderSummary />} />
+        <Route path="products" element={<Products />}>
+          <Route index element={<FeaturedProducts />} />
+          <Route path="featured" element={<FeaturedProducts />} />
+          <Route path="new" element={<NewProducts />} />
+        </Route>
+        {/* not feasible solution */}
+        {/* <Route path="users" element={<Users />} />
+        <Route path="users/1" element={<UserDetails />} />
+        <Route path="users/2" element={<UserDetails />} />
+        <Route path="users/3" element={<UserDetails />} /> */}
+
+        {/* feasible solution with URL params */}
+        <Route path="users" element={<Users />}>
+          <Route path=":userId" element={<UserDetails />} />
+          <Route path="admin" element={<Admin />} />
+        </Route>
+        <Route path="*" element={<NoMatch />} />
+      </Routes>
+    </>
+  );
+}
+
+export default App;
+```
+
+```
+/* lecture 10 Dynamic Routes */
+import { Outlet } from 'react-router-dom';
+export const Users = () => {
+  return (
+    <div>
+      <h2>User 1</h2>
+      <h2>User 2</h2>
+      <h2>User 3</h2>
+      <Outlet />
+    </div>
+  );
+};
+```
+
+```
+// change nested dynamic route in response to the user click. (Homework)
+// useHistory hook is not working. homework still pending
+import { useHistory } from 'react-router-dom';
+
+export const Users = () => {
+  const history = useHistory();
+
+  const handleUserClick = (user) => {
+    history.push(`/users/${user}`);
+  };
+  return (
+    <div>
+      {[1, 2, 3].map((user) => (
+        <li key={user} onClick={() => handleUserClick(user)}>
+          {`User ${user}`}
+        </li>
+      ))}
+    </div>
+  );
+};
+```
