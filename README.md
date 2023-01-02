@@ -709,3 +709,35 @@ export const Users = () => {
   );
 };
 ```
+
+## lecture 11 URL Params
+
+In a typical application we want to extract the `userId` and use that userId for other things. perhaps making an API call to fetch the details about that user. for our scenario we will only display the user id.
+
+- to extract the route parameters we need to import a hook `useParams` from `react-router` package.
+- `useParams hook` returns an object of key value pairs. lets called it `params`. This params will contain the dynamic params of key value pair from the current URL.
+- we can extract the userId from `params`.
+
+```
+/* lecture 11 URL Params */
+import { useParams } from 'react-router-dom';
+export const UserDetails = () => {
+  const params = useParams();
+  const userId = params.userId;
+  return <div>Details about user {userId}</div>;
+};
+```
+
+- now if we navigate to `http://localhost:3000/users/1` we see the details about the user 1.
+- and if we navigate to `http://localhost:3000/users/100` we see the details about the user 100.
+
+We can also destructure the userId in the same line as below
+
+```
+// destructure userId in the same line
+import { useParams } from 'react-router-dom';
+export const UserDetails = () => {
+  const { userId } = useParams();
+  return <div>Details about user {userId}</div>;
+};
+```
