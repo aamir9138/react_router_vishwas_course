@@ -864,3 +864,90 @@ export const Products = () => {
 ```
 
 Absolute Links are still valid and make more sense for the links like the navigation bar.
+
+## lecture 14 Lazy Loading
+
+Lazy loading is a technique where the components not require on the `Home` page can be split into bundles and download it only when the user navigate to that page. you can think of it as incrementally downloading the application.
+
+- it helps reduce initial load time there by improve the performance. for our example lets learn how to lazy load the `About` page.
+
+1. first we will make the `About` component bulky on purpose. go to `https://www.lipsum.com/` and generate 20 paragraph of text and paste it to `About` component. when we empty cache and reload. it took around 2.92 second for the `About` page to load.
+
+![About page load time](./pictures/about_page_bundle_loadtime.PNG)
+
+2. now we will lazy load the `About` page and observe the difference.
+
+### Lazy Loading a route
+
+To lazy load a route we need to use `dynamic imports` and `react suspense`.
+
+1. dynamic import the `About` component in `App.js`. for that we need to export `About` as a `default` first.
+2. `react` has a built-in `lazy()` function. we will use that.
+3. `lazy()` takes as an argument another function. This argument calls a dynamic import
+
+```
+const LazyAbout = React.lazy(() => import('./components/About'))
+```
+
+A promise is return by this dynamic import which is then converted into a module that contains a default exported react component which is our `About` component
+
+4. we include the `LazyAbout` component as part of the route configuration.
+
+```
+<Route path="about" element={<LazyAbout />} />
+```
+
+we will receive an error when we move to `About` link.
+`Uncaught Error: A React component suspended while rendering, but no fallback UI was specified.` To fix this error we have to use the suspense component from react and a fallback.
+
+```
+/* lecture 14 Lazy Loading */
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+// import { About } from './components/About';
+import { Admin } from './components/Admin';
+import { FeaturedProducts } from './components/FeaturedProducts';
+import { Home } from './components/Home';
+import { Navbar } from './components/Navbar';
+import { NewProducts } from './components/NewProducts';
+import { NoMatch } from './components/NoMatch';
+import { OrderSummary } from './components/OrderSummary';
+import { Products } from './components/Products';
+import { UserDetails } from './components/UserDetails';
+import { Users } from './components/Users';
+const LazyAbout = React.lazy(() => import('./components/About'));
+
+function App() {
+  return (
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route
+          path="about"
+          element={
+            <React.Suspense fallback="Loading...">
+              <LazyAbout />
+            </React.Suspense>
+          }
+        />
+        <Route path="order-summary" element={<OrderSummary />} />
+        <Route path="products" element={<Products />}>
+          <Route index element={<FeaturedProducts />} />
+          <Route path="featured" element={<FeaturedProducts />} />
+          <Route path="new" element={<NewProducts />} />
+        </Route>
+        <Route path="users" element={<Users />}>
+          <Route path=":userId" element={<UserDetails />} />
+          <Route path="admin" element={<Admin />} />
+        </Route>
+        <Route path="*" element={<NoMatch />} />
+      </Routes>
+    </>
+  );
+}
+
+export default App;
+```
+
+I followed the lecture but lazy loading is not working properly. we need to search about it.
