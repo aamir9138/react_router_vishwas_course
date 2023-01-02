@@ -808,3 +808,59 @@ export const Users = () => {
   );
 };
 ```
+
+## lecture 13 Relative Links
+
+To understand this lets go back to product page.
+
+- at the moment when we click on `Featured` the URL changes to `http://localhost:3000/products/featured` and when we click on `New` it changes to `http://localhost:3000/products/new` and that is because of the `relative link` that we specified.
+
+### Absolute Link
+
+- if we wish to use the absolute path the path will not be `to=/freatured` and `to=/new` this will construct a path from the route of the app and not the current URL. if we make changes like this it will navigate to `http://localhost:3000/featured` and `http://localhost:3000/new` respectively which is not the correct behaviour. the links will break.
+
+- to make this work with absolue link we need to add `to=/products/featured` and `to=/products/new`
+
+```
+// Scenario 1 using absolute links
+import { Link, Outlet } from 'react-router-dom';
+export const Products = () => {
+  return (
+    <>
+      <div>
+        <input type="search" placeholder="Search Products" />
+      </div>
+      <nav>
+        <Link to="/products/featured">Featured</Link>
+        <Link to="/products/new">New</Link>
+      </nav>
+      <Outlet />
+    </>
+  );
+};
+```
+
+### Relative Link
+
+A relative link is a link which doesn't start with a forwar slash `/` and will inherit the closest route in which they are rendered.
+
+```
+// Scenario 2 using relative links
+import { Link, Outlet } from 'react-router-dom';
+export const Products = () => {
+  return (
+    <>
+      <div>
+        <input type="search" placeholder="Search Products" />
+      </div>
+      <nav>
+        <Link to="featured">Featured</Link>
+        <Link to="new">New</Link>
+      </nav>
+      <Outlet />
+    </>
+  );
+};
+```
+
+Absolute Links are still valid and make more sense for the links like the navigation bar.
