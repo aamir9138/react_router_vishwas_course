@@ -741,3 +741,70 @@ export const UserDetails = () => {
   return <div>Details about user {userId}</div>;
 };
 ```
+
+## lecture 12 Search Params
+
+URL Params is not the only way to add parameters to the route. we can also add an optional query string. for example at the end of `http://localhost:3000/users/1` we can add `?filter=active`. so the URL will become
+`http://localhost:3000/users/1?filter=active`. These parameters are called `Search Params` in react routers.
+
+### Scenario
+
+![search params scenario](./pictures/search_params_scenario.PNG)
+
+### implementation
+
+1. create 2 buttons in `user.js` component
+
+```
+      <div>
+        <button>Active Users</button>
+        <button>Reset Filter</button>
+      </div>
+```
+
+2. onClick of these buttons we need to add or remove the `search params`. to deal with `search params` react router provide a hook called `useSearchParams`. This hook behave similar to the useState hook in react. instead of storing state in the memory though it is stored in the URL when the component invoke the hook.
+
+- The hook returns 2 values of which first one is an object which we will called `searchParams` and the second is `setSearchParams`. onClick of button we will use this as below.
+
+```
+import {useSearchParams } from 'react-router-dom';
+
+const [searchParams, setSearchParams] = useSearchParams();
+
+      <div>
+        <button onClick={() => setSearchParams({ filter: 'active' })}>
+          Active Users
+        </button>
+        <button onClick={() => setSearchParams({})}>Reset Filter</button>
+      </div>
+```
+
+3. To set the object value we use `setSearchParams` and if we want to get the values we use the `get method` on `searchParams` object. here we will use the get method to get the value of the `filter` and on the basis of that show either acitve users or all users.
+
+```
+/* lecture 12 Search Params */
+import { Outlet, useSearchParams } from 'react-router-dom';
+export const Users = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const showActiveUsers = searchParams.get('filter') === 'active';
+  return (
+    <div>
+      <h2>User 1</h2>
+      <h2>User 2</h2>
+      <h2>User 3</h2>
+      <Outlet />
+      <div>
+        <button onClick={() => setSearchParams({ filter: 'active' })}>
+          Active Users
+        </button>
+        <button onClick={() => setSearchParams({})}>Reset Filter</button>
+      </div>
+      {showActiveUsers ? (
+        <h2>showing active users</h2>
+      ) : (
+        <h2>showing all users</h2>
+      )}
+    </div>
+  );
+};
+```
